@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 var dbURI = "mongodb://localhost/mekanbul";
 
-// BU KISIM EKSİK OLDUĞU İÇİN ÇALIŞMIYOR:
+// VERCEL AYARI (ÖNEMLİ)
 if (process.env.NODE_ENV === "production") {
     dbURI = process.env.MONGODB_URI;
 }
@@ -9,18 +9,19 @@ if (process.env.NODE_ENV === "production") {
 mongoose.connect(dbURI);
 
 mongoose.connection.on("connected", function() {
-    console.log("Mongoose " + dbURI + " adresine baglandi.");
+    console.log("Mongoose bağlandı: " + dbURI);
 });
 mongoose.connection.on("error", function(err) {
-    console.log("Mongoose baglanti hatasi: " + err);
+    console.log("Mongoose bağlantı hatası: " + err);
 });
 mongoose.connection.on("disconnected", function() {
-    console.log("Mongoose baglantisi kesildi.");
+    console.log("Mongoose bağlantısı kesildi.");
 });
 
+// Uygulama kapandığında
 process.on("SIGINT", function() {
     mongoose.connection.close(function() {
-        console.log("Mongoose baglantisi kapatildi.");
+        console.log("Bağlantı kapatıldı.");
         process.exit(0);
     });
 });
